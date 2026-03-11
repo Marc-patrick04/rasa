@@ -23,7 +23,7 @@
     <nav>
         <ul>
             <li><a href="index.php" class="active">Home</a></li>
-            <li><a href="nominate.php">Nominate</a></li>
+            <li><a href="nominate.php">Nominate/Kwamamaza</a></li>
             <li><a href="previous-leaders.php">Previous Leaders</a></li>
             <li><a href="about.php">About RASA</a></li>
             <li><a href="login.php">Login</a></li>
@@ -44,13 +44,13 @@
             <div class="card">
                 <h3>Self Nomination</h3>
                 <p>Nominate yourself for a leadership position</p>
-                <a href="nominate.php?type=self" class="btn">Nominate Self</a>
+                <a href="nominate.php?type=self" class="btn">Nominate Self/Gutanga candidatire yawe</a>
             </div>
             
             <div class="card">
                 <h3>Nominate Others</h3>
                 <p>Nominate a fellow student for leadership</p>
-                <a href="nominate.php?type=other" class="btn">Nominate Others</a>
+                <a href="nominate.php?type=other" class="btn">Nominate Others/Gutanga umukandida</a>
             </div>
             
             <div class="card">

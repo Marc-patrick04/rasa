@@ -200,7 +200,7 @@ rsort($years);
     <nav>
         <ul>
             <li><a href="index.php">Home</a></li>
-            <li><a href="nominate.php">Nominate</a></li>
+            <li><a href="nominate.php">Nominate/Kwamamaza</a></li>
             <li><a href="previous-leaders.php" class="active">Previous Leaders</a></li>
             <li><a href="about.php">About RASA</a></li>
             <li><a href="login.php"> Login</a></li>

@@ -330,7 +330,7 @@ $success = isset($_GET['success']) ? "Self nomination submitted successfully!" :
     <nav>
         <ul>
             <li><a href="index.php">Home</a></li>
-            <li><a href="nominate.php" class="active">Nominate</a></li>
+            <li><a href="nominate.php" class="active">Nominate/Kwamamaza</a></li>
             <li><a href="previous-leaders.php">Previous Leaders</a></li>
             <li><a href="about.php">About RASA</a></li>
             <li><a href="login.php">Login</a></li>
@@ -340,10 +340,10 @@ $success = isset($_GET['success']) ? "Self nomination submitted successfully!" :
     <main class="container">
         <div class="nomination-tabs">
             <a href="?type=self" class="btn <?php echo $type === 'self' ? 'active' : 'btn-outline'; ?>">
-                 Self Nomination
+                 Self Nomination/Gutanga candidatire yawe
             </a>
             <a href="?type=other" class="btn <?php echo $type === 'other' ? 'active' : 'btn-outline'; ?>">
-                 Nominate Others
+                 Nominate Others/Gutanga umukandida
             </a>
         </div>
         
@@ -408,14 +408,14 @@ $success = isset($_GET['success']) ? "Self nomination submitted successfully!" :
 
                     </div>
                     
-                    <div class="form-group">
-                        <label for="year_of_study" class="required-field">Year of Study</label>
-                        <select id="year_of_study" name="year_of_study" required>
-                            <option value="">-- Select Year --</option>
-                            <option value="1A">Year 1A</option>
-                            <option value="1B">Year 1B</option>
-                            <option value="2">Year 2</option>
-                        </select>
+                    <div class="form-group" style="display: none;">
+                        <label for="manifesto" class="required-field">Other info</label>
+                        <textarea id="manifesto" name="manifesto" rows="6" 
+                                  placeholder="any other comment"
+                                  maxlength="2000">Not applicable</textarea>
+                        <div class="character-count">
+                            <span id="charCount">13</span>/2000 characters
+                        </div>
                     </div>
                     
                     <div class="form-group">
@@ -428,7 +428,7 @@ $success = isset($_GET['success']) ? "Self nomination submitted successfully!" :
                     
                     <div class="form-group">
                         <!-- <label for="manifesto" class="required-field">Other info</label> -->
-                        <textarea id="manifesto" name="manifesto" rows="6" value="NOT APPLICABLE" required 
+                        <textarea id="manifesto" name="manifesto" rows="6" value="NOT APPLICABLE" 
                                   placeholder="any other comment"
                                   maxlength="2000" hidden ></textarea>
                         <!-- <div class="character-count">
@@ -477,9 +477,9 @@ $success = isset($_GET['success']) ? "Self nomination submitted successfully!" :
                     
                     <div class="form-group">
                         <!-- <label for="manifesto" class="required-field">Reason for Nomination</label> -->
-                        <textarea id="manifesto" name="manifesto" rows="3" value="NOT APPLICABLE" required 
+                        <textarea id="manifesto" name="manifesto" rows="3" value="NOT APPLICABLE" 
                                   placeholder="Why are you nominating this person?"
-                                  maxlength="2000"></textarea>
+                                  maxlength="2000" hidden></textarea>
                         <!-- <div class="character-count">
                             <span id="charCount">0</span>/2000 characters
                         </div> -->
@@ -530,7 +530,6 @@ $success = isset($_GET['success']) ? "Self nomination submitted successfully!" :
             const studentId = document.getElementById('student_id');
             const yearOfStudy = document.getElementById('year_of_study');
             const phoneNumber = document.getElementById('phone_number');
-            const manifesto = document.getElementById('manifesto');
             
             // Reset previous error styles
             document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
@@ -562,12 +561,6 @@ $success = isset($_GET['success']) ? "Self nomination submitted successfully!" :
                 isValid = false;
             }
             
-            if (!manifesto.value.trim() || manifesto.value.length < 1) {
-                manifesto.classList.add('error');
-                alert('Please fill  a manifesto ');
-                isValid = false;
-            }
-            
             if (!isValid) {
                 alert('Please fill in all required fields correctly');
             }
@@ -580,7 +573,6 @@ $success = isset($_GET['success']) ? "Self nomination submitted successfully!" :
             const position = document.getElementById('position_id');
             const fullName = document.getElementById('full_name');
             const nominatedBy = document.getElementById('nominated_by');
-            const manifesto = document.getElementById('manifesto');
             
             // Reset previous error styles
             document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
@@ -599,12 +591,6 @@ $success = isset($_GET['success']) ? "Self nomination submitted successfully!" :
             
             if (!nominatedBy.value.trim()) {
                 nominatedBy.classList.add('error');
-                isValid = false;
-            }
-            
-            if (!manifesto.value.trim() || manifesto.value.length < 1) {
-                manifesto.classList.add('error');
-                alert('Please provide a reason for nomination');
                 isValid = false;
             }
             
