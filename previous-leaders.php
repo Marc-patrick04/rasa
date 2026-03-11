@@ -203,7 +203,7 @@ rsort($years);
             <li><a href="nominate.php">Nominate</a></li>
             <li><a href="previous-leaders.php" class="active">Previous Leaders</a></li>
             <li><a href="about.php">About RASA</a></li>
-            <li><a href="login.php">Admin Login</a></li>
+            <li><a href="login.php"> Login</a></li>
         </ul>
     </nav>
     

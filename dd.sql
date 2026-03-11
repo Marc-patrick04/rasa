@@ -27,7 +27,7 @@ CREATE TABLE candidates (
     position_id INTEGER REFERENCES positions(id) ON DELETE CASCADE,
     full_name VARCHAR(100) NOT NULL,
     student_id VARCHAR(50),
-    year_of_study INTEGER,
+    year_of_study VARCHAR(10),
     phone_number VARCHAR(20),
     email VARCHAR(100),
     manifesto TEXT,

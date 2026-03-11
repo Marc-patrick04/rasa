@@ -348,7 +348,7 @@ $recent_leaders = $db->query("
             <li><a href="nominate.php">Nominate</a></li>
             <li><a href="previous-leaders.php">Previous Leaders</a></li>
             <li><a href="about.php" class="active">About RASA</a></li>
-            <li><a href="login.php">Admin Login</a></li>
+            <li><a href="login.php"> Login</a></li>
         </ul>
     </nav>
     

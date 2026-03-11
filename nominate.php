@@ -25,7 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $db->prepare("INSERT INTO candidates (position_id, full_name, student_id, year_of_study, phone_number, manifesto, nomination_type, nominated_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         
         if ($stmt->execute([$position_id, $full_name, $student_id, $year_of_study, $phone_number, $manifesto, $nomination_type, $nominated_by])) {
-            $success = "Self nomination submitted successfully!";
+            // Redirect to prevent form resubmission on refresh
+            header("Location: nominate.php?type=" . $nomination_type . "&success=1");
+            exit();
         } else {
             $error = "Error submitting nomination. Please try again.";
         }
@@ -36,12 +38,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $db->prepare("INSERT INTO candidates (position_id, full_name, manifesto, nomination_type, nominated_by) VALUES (?, ?, ?, ?, ?)");
         
         if ($stmt->execute([$position_id, $full_name, $manifesto, $nomination_type, $nominated_by])) {
-            $success = "Nomination submitted successfully!";
+            // Redirect to prevent form resubmission on refresh
+            header("Location: nominate.php?type=" . $nomination_type . "&success=1");
+            exit();
         } else {
             $error = "Error submitting nomination. Please try again.";
         }
     }
 }
+
+// Check for success parameter from redirect
+$success = isset($_GET['success']) ? "Self nomination submitted successfully!" : null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -205,9 +212,109 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: #666;
             margin-top: 0.25rem;
         }
+        
+        /* Success Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-icon {
+            font-size: 3rem;
+            color: #28a745;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            color: #28a745;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+        
+        .modal-message {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .modal-btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-btn-primary {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .modal-btn-primary:hover {
+            background-color: #218838;
+        }
+        
+        .modal-btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .modal-btn-secondary:hover {
+            background-color: #5a6268;
+        }
     </style>
 </head>
 <body>
+    <!-- Success Modal -->
+    <div id="successModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-icon">✅</div>
+            <div class="modal-title">Success!</div>
+            <div class="modal-message" id="modalMessage">Your nomination has been submitted successfully!</div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-primary" onclick="closeSuccessModal()">Continue</button>
+            </div>
+        </div>
+    </div>
     <header>
         <div class="header-container">
             <div class="logo-container">
@@ -226,7 +333,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <li><a href="nominate.php" class="active">Nominate</a></li>
             <li><a href="previous-leaders.php">Previous Leaders</a></li>
             <li><a href="about.php">About RASA</a></li>
-            <li><a href="login.php">Admin Login</a></li>
+            <li><a href="login.php">Login</a></li>
         </ul>
     </nav>
     
@@ -250,11 +357,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             
             <?php if (isset($success)): ?>
-                <div class="alert alert-success">
-                     <?php echo $success; ?>
-                    <br>
-                    <small>Thank you for your nomination. The Arbitration Committee will review it shortly.</small>
-                </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        showSuccessModal('<?php echo addslashes($success); ?>');
+                    });
+                </script>
             <?php endif; ?>
             
             <?php if (isset($error)): ?>
@@ -304,17 +411,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="year_of_study" class="required-field">Year of Study</label>
                         <select id="year_of_study" name="year_of_study" required>
                             <option value="">-- Select Year --</option>
-                            <option value="1">Year 1A</option>
-                            <option value="1">Year 1B</option>
+                            <option value="1A">Year 1A</option>
+                            <option value="1B">Year 1B</option>
                             <option value="2">Year 2</option>
                         </select>
                     </div>
                     
                     <div class="form-group">
                         <label for="phone_number" class="required-field">Phone Number</label>
-                        <input type="tel" id="phone_number" name="phone_number" required 
+                        <input type="tel" name="phone_number" required 
                                placeholder=""
-                               maxlength="20">
+                               maxlength="20" >
                         
                     </div>
                     
@@ -451,19 +558,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!phoneNumber.value.trim()) {
                 phoneNumber.classList.add('error');
                 isValid = false;
-            } else {
-                // Basic phone number validation (Rwandan format)
-                const phoneRegex = /^0[7,8,9]\d{8}$/;
-                if (!phoneRegex.test(phoneNumber.value.replace(/\s/g, ''))) {
-                    phoneNumber.classList.add('error');
-                    alert('Please enter a valid Rwandan phone number (e.g., 078XXXXXXX)');
-                    isValid = false;
-                }
             }
             
-            if (!manifesto.value.trim() || manifesto.value.length < 4) {
+            if (!manifesto.value.trim() || manifesto.value.length < 1) {
                 manifesto.classList.add('error');
-                alert('Please provide a manifesto with at least 4 characters');
+                alert('Please fill  a manifesto ');
                 isValid = false;
             }
             
@@ -501,9 +600,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 isValid = false;
             }
             
-            if (!manifesto.value.trim() || manifesto.value.length < 4) {
+            if (!manifesto.value.trim() || manifesto.value.length < 1) {
                 manifesto.classList.add('error');
-                alert('Please provide a reason for nomination with at least 4 characters');
+                alert('Please provide a reason for nomination');
                 isValid = false;
             }
             
@@ -524,6 +623,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             });
         });
+        
+        // Success Modal Functions
+        function showSuccessModal(message) {
+            const modal = document.getElementById('successModal');
+            const modalMessage = document.getElementById('modalMessage');
+            
+            // Update message if provided
+            if (message) {
+                modalMessage.innerHTML = message + '<br><small>Thank you for your nomination. The Arbitration Committee will review it shortly.</small>';
+            }
+            
+            // Show modal with animation
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+            }, 10);
+        }
+        
+        function closeSuccessModal() {
+            const modal = document.getElementById('successModal');
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.display = 'none';
+                // Redirect to home page after closing modal
+                window.location.href = 'index.php';
+            }, 300);
+        }
     </script>
 </body>
 </html>
