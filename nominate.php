@@ -7,7 +7,7 @@ $db = $database->getConnection();
 $type = isset($_GET['type']) ? $_GET['type'] : 'self';
 
 // Get active positions
-$positions = $db->query("SELECT * FROM positions WHERE is_active = true ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
+$positions = $db->query("SELECT * FROM positions WHERE is_active = true ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $position_id = $_POST['position_id'];
@@ -381,9 +381,10 @@ $success = isset($_GET['success']) ? "Self nomination submitted successfully!" :
                         <label for="position_id" class="required-field">Position</label>
                         <select id="position_id" name="position_id" required>
                             <option value="">-- Select a Position --</option>
+                            <?php $counter = 1; ?>
                             <?php foreach ($positions as $position): ?>
                                 <option value="<?php echo $position['id']; ?>">
-                                    <?php echo htmlspecialchars($position['name']); ?>
+                                    <?php echo $counter++; ?>. <?php echo htmlspecialchars($position['name']); ?>
                                     <?php if (!empty($position['description'])): ?>
                                         - <?php echo htmlspecialchars($position['description']); ?>
                                     <?php endif; ?>
@@ -426,13 +427,13 @@ $success = isset($_GET['success']) ? "Self nomination submitted successfully!" :
                     </div>
                     
                     <div class="form-group">
-                        <label for="manifesto" class="required-field">Other info</label>
-                        <textarea id="manifesto" name="manifesto" rows="6" required 
+                        <!-- <label for="manifesto" class="required-field">Other info</label> -->
+                        <textarea id="manifesto" name="manifesto" rows="6" value="NOT APPLICABLE" required 
                                   placeholder="any other comment"
-                                  maxlength="2000"></textarea>
-                        <div class="character-count">
+                                  maxlength="2000" hidden ></textarea>
+                        <!-- <div class="character-count">
                             <span id="charCount">0</span>/2000 characters
-                        </div>
+                        </div> -->
                     </div>
                     
                     <button type="submit" class="submit-btn" id="submitBtn">
@@ -448,9 +449,10 @@ $success = isset($_GET['success']) ? "Self nomination submitted successfully!" :
                         <label for="position_id" class="required-field">Position</label>
                         <select id="position_id" name="position_id" required>
                             <option value="">-- Select a Position --</option>
+                            <?php $counter = 1; ?>
                             <?php foreach ($positions as $position): ?>
                                 <option value="<?php echo $position['id']; ?>">
-                                    <?php echo htmlspecialchars($position['name']); ?>
+                                    <?php echo $counter++; ?>. <?php echo htmlspecialchars($position['name']); ?>
                                     <?php if (!empty($position['description'])): ?>
                                         - <?php echo htmlspecialchars($position['description']); ?>
                                     <?php endif; ?>
@@ -474,13 +476,13 @@ $success = isset($_GET['success']) ? "Self nomination submitted successfully!" :
                        
                     
                     <div class="form-group">
-                        <label for="manifesto" class="required-field">Reason for Nomination</label>
-                        <textarea id="manifesto" name="manifesto" rows="3" required 
+                        <!-- <label for="manifesto" class="required-field">Reason for Nomination</label> -->
+                        <textarea id="manifesto" name="manifesto" rows="3" value="NOT APPLICABLE" required 
                                   placeholder="Why are you nominating this person?"
                                   maxlength="2000"></textarea>
-                        <div class="character-count">
+                        <!-- <div class="character-count">
                             <span id="charCount">0</span>/2000 characters
-                        </div>
+                        </div> -->
                     </div>
                     
                     <button type="submit" class="submit-btn" id="submitBtn">

@@ -10,7 +10,7 @@ $query = "
     SELECT pl.*, p.name as position_name, p.description as position_description
     FROM previous_leaders pl
     LEFT JOIN positions p ON pl.position_id = p.id
-    ORDER BY pl.year_served DESC, pl.full_name ASC
+    ORDER BY pl.id DESC, pl.full_name ASC
 ";
 $previous_leaders = $db->query($query)->fetchAll(PDO::FETCH_ASSOC);
 

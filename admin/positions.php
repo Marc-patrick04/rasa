@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Get all positions
-$positions = $db->query("SELECT * FROM positions ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
+$positions = $db->query("SELECT * FROM positions ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -238,9 +238,10 @@ $positions = $db->query("SELECT * FROM positions ORDER BY name")->fetchAll(PDO::
                         </tr>
                     </thead>
                     <tbody>
+                        <?php $counter = 1; ?>
                         <?php foreach ($positions as $position): ?>
                         <tr>
-                            <td><?php echo $position['id']; ?></td>
+                            <td><?php echo $counter++; ?></td>
                             <td><?php echo htmlspecialchars($position['name']); ?></td>
                             <td><?php echo htmlspecialchars($position['description']); ?></td>
                             <td>
